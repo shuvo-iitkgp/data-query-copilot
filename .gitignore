@@ -1,0 +1,55 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# =========================
+# Data & Databases
+# =========================
+data/
+*.sqlite
+*.db
+*.sqlite3
+
+# Allow committed test fixtures explicitly
+!tests/fixtures/
+!tests/fixtures/*.sqlite
+
+# =========================
+# Logs & Artifacts
+# =========================
+*.log
+*.jsonl
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+
+# =========================
+# Build / Distribution
+# =========================
+build/
+dist/
