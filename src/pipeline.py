@@ -8,6 +8,8 @@ from src.sql_generator import SQLGenerator
 from src.sql_validator import validate_sql, ValidationDecision
 from src.sql_rewriter import rewrite_sql, RewriteResult
 from src.sql_policy import SQLPolicy
+from src.query_executor import QueryExecutor, ExecutionResult
+from src.query_executor import QueryExecutionError
 
 
 @dataclass(frozen=True)
@@ -48,3 +50,27 @@ def generate_validate_rewrite(
             **gen_res.meta,
         },
     )
+def generate_validate_execute(
+    question: str,
+    generator: SQLGenerator,
+    executor: QueryExecutor,
+    policy: Optional[SQLPolicy] = None,
+):
+    policy = policy or SQLPolicy()
+
+    gen_res = generator.generate_sql(question, policy=policy)
+    dec = validate_sql(gen_res.sql_clean, policy=policy)
+
+    if not dec.ok:
+        raise ValidationFailed(dec.reasons)
+
+    rewritten = rewrite_sql(gen_res.sql_clean, policy=policy)
+    result = executor.execute(rewritten.sql)
+
+    return {
+        "sql": rewritten.sql,
+        "columns": result.columns,
+        "rows": result.rows,
+        "row_count": result.row_count,
+        "execution_time_ms": result.execution_time_ms,
+    }

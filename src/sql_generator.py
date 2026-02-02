@@ -43,6 +43,7 @@ def build_sql_prompt(
     schema_blob: str,
     question: str,
     policy: Optional[SQLPolicy] = None,
+    error_context: Optional[str] = None,
 ) -> str:
     """
     Phase 2 prompt: schema + hard formatting rules + SQL anchor.
@@ -72,9 +73,17 @@ Schema:
 
 User question:
 {question}
-
-SQL:
 """.strip()
+
+    if error_context:
+        rules += f"""
+
+            Previous attempt feedback (JSON):
+            {error_context}
+            """.strip()
+
+    rules += "\n\nSQL:\n"
+
 
     return rules
 
@@ -162,25 +171,40 @@ class SQLGenerator:
         self.model.eval()
 
     @torch.inference_mode()
-    def generate_sql(self, question: str, policy: Optional[SQLPolicy] = None) -> GenerationResult:
+    def generate_sql(self, question: str, policy: Optional[SQLPolicy] = None, error_context: Optional[str] = None,
+) -> GenerationResult:
         schema_blob = self.schema_service.schema_blob()
-        prompt = build_sql_prompt(schema_blob=schema_blob, question=question, policy=policy)
+        prompt = build_sql_prompt(
+            schema_blob=schema_blob,
+            question=question,
+            policy=policy,
+            error_context=error_context,
+        )
 
         inputs = self.tokenizer(prompt, return_tensors="pt")
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         t0 = time.time()
+        gen_kwargs = dict(
+            max_new_tokens=self.cfg.max_new_tokens,
+            do_sample=False,  # deterministic
+            pad_token_id=self.tokenizer.eos_token_id,
+            eos_token_id=self.tokenizer.eos_token_id,
+            repetition_penalty=self.cfg.repetition_penalty,
+        )
+        
+        if self.cfg.do_sample:
+          gen_kwargs.update(
+              do_sample=True,
+              temperature=self.cfg.temperature,
+              top_p=self.cfg.top_p,
+          )
 
         out = self.model.generate(
             **inputs,
-            max_new_tokens=self.cfg.max_new_tokens,
-            do_sample=self.cfg.do_sample,   # must be False for determinism
-            temperature=self.cfg.temperature,
-            top_p=self.cfg.top_p,
-            repetition_penalty=self.cfg.repetition_penalty,
-            pad_token_id=self.tokenizer.eos_token_id,
-            eos_token_id=self.tokenizer.eos_token_id,
+            **gen_kwargs
         )
+
 
         latency_ms = int((time.time() - t0) * 1000)
 

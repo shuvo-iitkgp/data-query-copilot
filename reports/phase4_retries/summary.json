@@ -1,0 +1,7 @@
+{
+  "n_questions": 6,
+  "no_retry_success_rate": 0.3333333333333333,
+  "retry_success_rate": 0.8333333333333334,
+  "absolute_gain": 0.5,
+  "logs_path": "reports/phase4_retries/retry_eval.jsonl"
+}
