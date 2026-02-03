@@ -1,0 +1,30 @@
+[
+  {
+    "id": "q1",
+    "title": "Query 1",
+    "question": "How many stations are there by state?",
+    "ok": true,
+    "stop_reason": "success",
+    "attempts_used": 2,
+    "sql": "SELECT state, COUNT(*) FROM fuel_stations GROUP BY state LIMIT 200",
+    "columns": [
+      "state",
+      "COUNT(*)"
+    ],
+    "row_count": 1
+  },
+  {
+    "id": "q2",
+    "title": "Query 2",
+    "question": "Top 10 cities by station count",
+    "ok": true,
+    "stop_reason": "success",
+    "attempts_used": 2,
+    "sql": "SELECT city, COUNT(*) AS station_count FROM fuel_stations GROUP BY city ORDER BY station_count DESC LIMIT 10",
+    "columns": [
+      "city",
+      "station_count"
+    ],
+    "row_count": 10
+  }
+]

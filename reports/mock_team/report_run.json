@@ -1,0 +1,106 @@
+[
+  {
+    "id": "r1",
+    "title": "Stations by state",
+    "question": "How many stations are there by state?",
+    "ok": true,
+    "stop_reason": "success",
+    "sql": "SELECT state, COUNT(*) FROM fuel_stations GROUP BY state LIMIT 200",
+    "row_count": 1,
+    "columns": [
+      "state",
+      "COUNT(*)"
+    ],
+    "attempts_used": 2
+  },
+  {
+    "id": "r2",
+    "title": "Top cities by station count",
+    "question": "Top 10 cities by station count",
+    "ok": true,
+    "stop_reason": "success",
+    "sql": "SELECT city, COUNT(*) AS station_count FROM fuel_stations GROUP BY city ORDER BY station_count DESC LIMIT 10",
+    "row_count": 10,
+    "columns": [
+      "city",
+      "station_count"
+    ],
+    "attempts_used": 2
+  },
+  {
+    "id": "r3",
+    "title": "Restricted access footprint",
+    "question": "How many stations have restricted access?",
+    "ok": true,
+    "stop_reason": "success",
+    "sql": "SELECT COUNT(*) FROM fuel_stations WHERE restricted_access = 1 LIMIT 200",
+    "row_count": 1,
+    "columns": [
+      "COUNT(*)"
+    ],
+    "attempts_used": 1
+  },
+  {
+    "id": "r4",
+    "title": "Fuel type mix",
+    "question": "Count stations by fuel_type_code",
+    "ok": true,
+    "stop_reason": "success",
+    "sql": "SELECT fuel_type_code ,  COUNT(*) FROM fuel_stations GROUP BY fuel_type_code LIMIT 200",
+    "row_count": 1,
+    "columns": [
+      "fuel_type_code",
+      "COUNT(*)"
+    ],
+    "attempts_used": 1
+  },
+  {
+    "id": "r5",
+    "title": "California station sample",
+    "question": "Show 50 stations in California with station_name and street_address",
+    "ok": false,
+    "stop_reason": "oscillation",
+    "attempts": [
+      {
+        "attempt": 1,
+        "sql_raw": ":\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSELECT station_name, street_address FROM fuel_stations WHERE state = 'CA' LIMIT 50",
+        "sql_clean": ":\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSELECT station_name, street_address FROM fuel_stations WHERE state = 'CA' LIMIT 50",
+        "validated_ok": false,
+        "validation_reasons": [
+          "not_select_or_with"
+        ],
+        "rewritten_sql": null,
+        "executed_ok": false,
+        "error_feedback": {
+          "category": "validation",
+          "message": "SQL failed validation rules.",
+          "details": {
+            "reasons": [
+              "not_select_or_with"
+            ]
+          }
+        },
+        "latency_ms": 6503
+      },
+      {
+        "attempt": 2,
+        "sql_raw": ":\n\n\n\n\n\n\n\n\nSELECT station_name, street_address FROM fuel_stations WHERE state = 'CA' LIMIT 50",
+        "sql_clean": ":\n\n\n\n\n\n\n\n\nSELECT station_name, street_address FROM fuel_stations WHERE state = 'CA' LIMIT 50",
+        "validated_ok": false,
+        "validation_reasons": [
+          "oscillation_detected"
+        ],
+        "rewritten_sql": null,
+        "executed_ok": false,
+        "error_feedback": {
+          "category": "oscillation",
+          "message": "Repeated SQL from attempt 1",
+          "details": {
+            "repeated_attempt": 1
+          }
+        },
+        "latency_ms": 2568
+      }
+    ]
+  }
+]

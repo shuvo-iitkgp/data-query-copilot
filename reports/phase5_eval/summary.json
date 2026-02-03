@@ -1,0 +1,13 @@
+[
+  {
+    "mode": "retry",
+    "cases": 6,
+    "runs_per_case": 5,
+    "total_trials": 30,
+    "execution_success_rate": 0.8333333333333334,
+    "correctness_rate": 0.8333333333333334,
+    "cases_consistent_sql_rate": 1.0,
+    "cases_consistent_result_rate": 0.8333333333333334,
+    "allow_fail_cases": 1
+  }
+]

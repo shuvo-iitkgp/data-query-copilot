@@ -1,0 +1,33 @@
+{
+  "report_title": "Weekly Alternative Fuel Stations Snapshot",
+  "db_path": "tests/fixtures/nrel_sample.sqlite",
+  "max_attempts": 3,
+  "table_preview_rows": 12,
+  "queries": [
+    {
+      "id": "r1",
+      "title": "Stations by state",
+      "question": "How many stations are there by state?"
+    },
+    {
+      "id": "r2",
+      "title": "Top cities by station count",
+      "question": "Top 10 cities by station count"
+    },
+    {
+      "id": "r3",
+      "title": "Restricted access footprint",
+      "question": "How many stations have restricted access?"
+    },
+    {
+      "id": "r4",
+      "title": "Fuel type mix",
+      "question": "Count stations by fuel_type_code"
+    },
+    {
+      "id": "r5",
+      "title": "California station sample",
+      "question": "Show 50 stations in California with station_name and street_address"
+    }
+  ]
+}
