@@ -9,7 +9,6 @@ df = pd.read_csv(CSV_PATH)
 
 conn = sqlite3.connect(DB_PATH)
 df.columns = [c.replace(".", "__") for c in df.columns]
-
 df.to_sql(TABLE_NAME, conn, if_exists="replace", index=False)
 conn.close()
 

@@ -1,0 +1,21 @@
+# Core Python
+python-dateutil>=2.8.2
+
+# LLM + Inference
+torch>=2.1.0
+transformers>=4.39.0
+accelerate>=0.27.0
+sentencepiece>=0.1.99
+
+# Data & SQL
+pandas>=2.1.0
+numpy>=1.24.0
+
+# SQLite safety & execution
+sqlparse>=0.4.4
+
+# Evaluation & testing
+pytest>=8.0.0
+
+# Utilities
+tqdm>=4.66.0
